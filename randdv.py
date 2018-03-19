@@ -21,6 +21,7 @@ except urllib2.HTTPError:
         exit(0)
 html = website.read()
 parser.feed(html)
+print 'Ready. Press R_CONTROL to request a new show.'
 
 while(1):
         if(win32api.GetAsyncKeyState(win32con.VK_RCONTROL)):
@@ -45,6 +46,6 @@ while(1):
                         print "Loading show: " + showlink
                         webbrowser.open(showlink)
 
-                else:
-                        time.sleep(5)
+        else:
+                time.sleep(5)
             

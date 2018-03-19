@@ -31,7 +31,6 @@ while(1):
         if doit is 1:
                 doit = 0
                 showlink = TLD + linklist[random.randint(1,len(linklist))]
-                print showlink
 
                 try:
                         response = urllib2.urlopen(showlink)

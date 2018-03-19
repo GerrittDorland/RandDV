@@ -14,7 +14,11 @@ class MyHTMLParser(HTMLParser):
 
 parser = MyHTMLParser()
 TLD = "http://www.distortednews.com/podshows/"
-website = urllib2.urlopen(TLD)
+try:
+        website = urllib2.urlopen(TLD)
+except urllib2.HTTPError:
+        print 'Tim moved the show. This script is broken until I fix it.'
+        exit(0)
 html = website.read()
 parser.feed(html)
 

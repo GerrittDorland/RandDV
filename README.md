@@ -4,7 +4,7 @@ This thing currently only works on Windows. I'll update it to be multiplatform i
 
 USAGE (universal):
 	- While script is running, set focus to the console that is running the script.
-	- Press [ENTER]
+	- Press [ENTER]. Alternatively, enter 't' or 'today'+[ENTER] to attempt to load today's show.
 
 TO CLOSE (universal):
 	- Escape sequence is required. On OSX/Linux, use CTRL+C.

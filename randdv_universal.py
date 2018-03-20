@@ -1,16 +1,20 @@
 import webbrowser, time, random, urllib2
 from HTMLParser import HTMLParser
 
-doit = 0
 success = 0
-linklist = []
+showlist = []
+todays_show = time.strftime("%m%d%y")
+btodays_show_available = False
+todays_show_index = -1
+showlink = ""
+
 
 class MyHTMLParser(HTMLParser):
         def handle_starttag(self, tag, attrs):
                 if tag == 'a':
                         for name, show in attrs:
 
-                                linklist.append(show)
+                                showlist.append(show)
 
 parser = MyHTMLParser()
 TLD = "http://www.distortednews.com/podshows/"
@@ -23,23 +27,39 @@ html = website.read()
 parser.feed(html)
 print 'Ready. Press [ENTER] while this window is focused to request a new show.'
 
+for show in showlist:
+    if todays_show in show:
+        btodays_show_available = True
+        todays_show_index = showlist.index(show)
+
 while(1):
         data = raw_input()
-        
-        showlink = TLD + linklist[random.randint(1,len(linklist))]
 
-        try:
-                response = urllib2.urlopen(showlink)
-                success = 1
+        if data.find("today") != -1 or data.find("t") != -1 or data.find("fuck") != -1:
+            if btodays_show_available:
+                showlink = TLD + showlist[todays_show_index]
+            else:
+                bloadShow = False
+                print 'Today\'s show is unavailable here.'
+                print 'Either it hasn\'t been posted yet, or is a Sideshow Exclusive.'
+                print 'Feel free to check here:'
+                print 'http://www.superfreaksideshow.com/members3/category/podcasts/'
+        else:
+            showlink = TLD + showlist[random.randint(1,len(showlist))]
 
-        except urllib2.HTTPError:
-                success = 0
-                print "No Show / Bad generation. Trying again..."
+        if len(showlink) > 1:
+            try:
+                    response = urllib2.urlopen(showlink)
+                    success = 1
 
-        if success is 1:
-                success = 0
-                print "Loading show: " + showlink
-                webbrowser.open(showlink)
+            except urllib2.HTTPError:
+                    success = 0
+                    print "No Show / Bad generation. Trying again..."
+
+            if success is 1:
+                    success = 0
+                    print "Loading show: " + showlink
+                    webbrowser.open(showlink)
 
         else:
-                time.sleep(5)
+                print 'Show loading failed.'

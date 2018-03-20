@@ -1,71 +1,19 @@
-import webbrowser, time, random, urllib2, urllib
+import webbrowser, time, random, urllib2, urllib, sys, os
 from HTMLParser import HTMLParser
 import xml.etree.ElementTree as ET
 
-sideshowRss = "www.superfreaksideshow.com/members3/wp-content/plugins/s2member-files/s2member-file-inline/s2member-file-remote/"
-
-def usage():
-    print '---------------------'
-    print 'Enter \"superfreak\" to enter your Sideshow credentials.'
-    print 'Enter \"help\" or \"?\" to pull this menu up again.'
-    print '---------------------'
-
-def parseXmlBullshit(xml, big_list):
-    count = 0
-    for rss in xml:
-        count = count + 1
-        print 'Parsing year... ' + str(count) + ' of ' + str(len(xml)) + '...'
-        e = ET.parse(rss).getroot()
-        for child in e:
-            for kiddie in child.findall('item'):
-                for lilbaby in kiddie.findall('enclosure'):
-                    big_list.append(lilbaby.get('url'))
-    del e
-
-def load_SFSS(uname, pw, sfss_list):
-    sshow_list = []
-    sfssrss = []
-    for show in sfss_list:
-        if(len(show) > 8):
-            if str(show[7]+show[8]) == "16":
-                sshow_list.append(show)
-
-    print 'loading 0%...'
-    sfssrss.append(urllib.urlopen("http://" + uname + ":" + pw + "@" + sideshowRss + "podcast.xml"))
-    print 'Current Year downloaded. loading 9%...'
-    sfssrss.append(urllib.urlopen("http://" + uname + ":" + pw + "@" + sideshowRss + "2015.xml"))
-    print '2015 downloaded. loading 18%...'
-    sfssrss.append(urllib.urlopen("http://" + uname + ":" + pw + "@" + sideshowRss + "2014.xml"))
-    print '2014 downloaded. loading 27%...'
-    sfssrss.append(urllib.urlopen("http://" + uname + ":" + pw + "@" + sideshowRss + "2013.xml"))
-    print '2013 downloaded. loading 36%...'
-    sfssrss.append(urllib.urlopen("http://" + uname + ":" + pw + "@" + sideshowRss + "2012.xml"))
-    print '2012 downloaded. loading 45%...'
-    sfssrss.append(urllib.urlopen("http://" + uname + ":" + pw + "@" + sideshowRss + "2011.xml"))
-    print '2011 downloaded. loading 54%...'
-    sfssrss.append(urllib.urlopen("http://" + uname + ":" + pw + "@" + sideshowRss + "2010.xml"))
-    print '2010 downloaded. loading 63%...'
-    sfssrss.append(urllib.urlopen("http://" + uname + ":" + pw + "@" + sideshowRss + "2007.xml"))
-    print '2007 downloaded. loading 72%...'
-    sfssrss.append(urllib.urlopen("http://" + uname + ":" + pw + "@" + sideshowRss + "2006.xml"))
-    print '2006 downloaded. loading 81%...'
-    sfssrss.append(urllib.urlopen("http://" + uname + ":" + pw + "@" + sideshowRss + "2005.xml"))
-    print '2005 downloaded. loading 90%...'
-    sfssrss.append(urllib.urlopen("http://" + uname + ":" + pw + "@" + sideshowRss + "2004.xml"))
-    print '2004 downloaded. loading 100%!'
-
-    print 'Parsing the shows...'
-    parseXmlBullshit(sfssrss, show_list)
-    print 'Parsing complete! Enjoy! You can now use the randomizer as you normally would.'
-
 class MyHTMLParser(HTMLParser):
-        def handle_starttag(self, tag, attrs):
-                if tag == 'a':
-                        for name, show in attrs:
-                                if show[0] != "/":
-                                    showlist.append(show)
+    def handle_starttag(self, tag, attrs):
+            if tag == 'a':
+                    for name, show in attrs:
+                            if show[0] != "/":
+                                showlist.append(show)
 
+sideshowRss = "www.superfreaksideshow.com/members3/wp-content/plugins/s2member-files/s2member-file-inline/s2member-file-remote/"
 success = 0
+isSShowMember = False
+ssUname = ""
+ssPw = ""
 showlist = []
 sshowlist = []
 todays_show = time.strftime("%m%d%y")
@@ -76,6 +24,125 @@ showlink = ""
 parser = MyHTMLParser()
 TLD = "http://www.distortednews.com/podshows/"
 
+def usage():
+    print '---------------------'
+    print 'Enter \"superfreak\" or \"s\" to enter your Sideshow credentials.'
+    print '   After the first time, login will be automatic.\n'
+    print 'Enter \"help\" or \"?\" to pull this menu up again.'
+    print '---------------------'
+
+def findSShowMember():
+    global ssUname
+    global ssPw
+    #If you are on Windows, change this "/" to "\\"
+    file = os.getcwd() + "/" + "freak.lgn"
+    try:
+        f = open(file, 'r')
+        ssUname = f.readline()
+        ssUname = ssUname.strip('\n')
+        ssPw = f.readline()
+        ssPw = ssPw.strip('\n')
+        f.close()
+        return True
+    except:
+        "You don't seem to have a login file prepared."
+        print '---------------------'
+        return False
+
+def validateFreak():
+    global ssUname
+    global ssPw
+    global isSShowMember
+    print 'Testing Login...'
+    print 'If your Terminal requests additional login information,'
+    print 'you fucked up. Close this script and try again you careless fairy.'
+    print '   KNOWN BUG: If you fuck this up, go to the CWD of this script and delete'
+    print '   freak.lgn. Otherwise you\'ll be stuck in this hell forever.'
+
+    try:
+        result = urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "podcast.xml")
+    except:
+        os.remove(os.getcwd() + "/" + "freak.lgn")
+        print 'Unable to log in with provided credentials. TRY AGAIN.'
+        print '---------------------'
+        return False
+    isSShowMember = True
+    return True
+
+def createFreak(uname,pw):
+    #If you are on Windows, change this "/" to "\\"
+    file = os.getcwd() + "/" + "freak.lgn"
+    if isSShowMember is True:
+        try:
+            f = open(file, 'w+')
+            f.write(uname)
+            f.write(pw)
+            f.close()
+        except:
+            print 'Unable to write file. Please move the script somewhere with write permission.'
+            print '---------------------'
+            return False
+        return True
+    return False
+
+def parseXmlBullshit(xml):
+    global sshowlist
+    count = 0
+    for rss in xml:
+        count = count + 1
+        print 'Parsing year... ' + str(count) + ' of ' + str(len(xml)) + '...'
+        e = ET.parse(rss).getroot()
+        for child in e:
+            for kiddie in child.findall('item'):
+                for lilbaby in kiddie.findall('enclosure'):
+                    sshowlist.append(lilbaby.get('url'))
+    del e
+
+def load_SFSS():
+    global showlist
+    global ssUname
+    global ssPw
+    sfssrss = []
+    removeme = []
+
+    for show in showlist:
+        if(len(show) > 8):
+            if str(show[7]+show[8]) != "16":
+                removeme.append(show)
+
+    for show in removeme:
+        showlist.remove(show)
+    del removeme[:]
+
+    print 'loading 0%...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "podcast.xml"))
+    print 'Current Year downloaded. loading 9%...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2015.xml"))
+    print '2015 downloaded. loading 18%...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2014.xml"))
+    print '2014 downloaded. loading 27%...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2013.xml"))
+    print '2013 downloaded. loading 36%...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2012.xml"))
+    print '2012 downloaded. loading 45%...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2011.xml"))
+    print '2011 downloaded. loading 54%...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2010.xml"))
+    print '2010 downloaded. loading 63%...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2007.xml"))
+    print '2007 downloaded. loading 72%...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2006.xml"))
+    print '2006 downloaded. loading 81%...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2005.xml"))
+    print '2005 downloaded. loading 90%...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2004.xml"))
+    print '2004 downloaded. loading 100%!'
+
+    print 'Parsing the shows...'
+    parseXmlBullshit(sfssrss)
+    print 'Parsing complete! Enjoy! You can now use the randomizer as you normally would.'
+    print '---------------------'
+
 try:
         website = urllib2.urlopen(TLD)
 except urllib2.HTTPError:
@@ -83,7 +150,9 @@ except urllib2.HTTPError:
         exit(0)
 html = website.read()
 parser.feed(html)
-
+print '\n\n---------------------'
+print '     RANDDV.PY'
+print '---------------------'
 print 'Ready. Press [ENTER] while this window is focused to request a new show.'
 usage()
 
@@ -91,6 +160,11 @@ for show in showlist:
     if todays_show in show:
         btodays_show_available = True
         todays_show_index = showlist.index(show)
+
+if isSShowMember is False:
+    if findSShowMember() is True:
+        if validateFreak() is True:
+            load_SFSS()
 
 while(1):
         data = raw_input()
@@ -108,11 +182,44 @@ while(1):
                 print '---------------------'
         elif len(data) < 1:
             bloadShow = True
-            showlink = TLD + showlist[random.randint(1,len(showlist))]
-        elif data == "sideshow" or data == "superfreak" or data == "s":
-            
 
-            load_SFSS(username, password, sshowlist)
+            if isSShowMember == True:
+                sizeFree = len(showlist)
+                sizeSshow = len(sshowlist)
+                upperBound = sizeFree + sizeSshow
+                show = random.randint(1,upperBound)
+                if show <= sizeFree:
+                    showlink = TLD + showlist[show]
+                else:
+                    showlink = "http://" + ssUname + ":" + ssPw + "@" + sshowlist[show - sizeFree].replace('http://', '')
+            else:
+                show = showlist[random.randint(1,len(showlist))]
+                showlink = TLD + show
+        elif data == "sideshow" or data == "superfreak" or data == "s":
+            if isSShowMember is False:
+                if findSShowMember() is True:
+                    if validateFreak() is True:
+                        load_SFSS()
+                else:
+                    print 'Looks like you need to set your Sideshow Login Credentials.'
+                    print 'Please enter your Username and Password. Remember, these aren\'t encrypted so...'
+                    print 'Enter at your own risk.'
+                    print 'Username:'
+                    ssUname = raw_input()
+                    ssUname = ssUname.replace("@", "%40")
+                    print 'Password:'
+                    ssPw = raw_input()
+                    print '---------------------'
+
+                    print 'Testing login...'
+                    if validateFreak() is True:
+                        if createFreak(ssUname, ssPw) is True:
+                            print 'Looks like you\'re ready to go! Let\'s load those shows.'
+                            print '---------------------'
+                            load_SFSS()
+            else:
+                print 'You\'re already logged in, dude'
+                print '---------------------'
 
         elif data == "?" or data == "help":
             usage()
@@ -120,10 +227,10 @@ while(1):
         if bloadShow == True:
             if len(showlink) > 1:
                 try:
-                        response = urllib2.urlopen(showlink)
+                        response = urllib.urlopen(showlink)
                         success = 1
 
-                except urllib2.HTTPError:
+                except:
                         success = 0
                         print "No Show / Bad generation. Trying again..."
                         print '---------------------'
@@ -131,7 +238,7 @@ while(1):
                 if success is 1:
                         success = 0
                         print "Loading show: " + showlink
-                        print '---------------------'
+                        print '\n---------------------'
                         webbrowser.open(showlink)
 
             else:

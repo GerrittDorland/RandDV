@@ -16,6 +16,7 @@ ssUname = ""
 ssPw = ""
 showlist = []
 sshowlist = []
+sshowdatelist = []
 todays_show = time.strftime("%m%d%y")
 btodays_show_available = False
 todays_show_index = -1
@@ -75,8 +76,7 @@ def createFreak(uname,pw):
     if isSShowMember is True:
         try:
             f = open(file, 'w+')
-            f.write(uname)
-            f.write(pw)
+            f.write(uname + "\n" + pw)
             f.close()
         except:
             print 'Unable to write file. Please move the script somewhere with write permission.'
@@ -85,8 +85,36 @@ def createFreak(uname,pw):
         return True
     return False
 
+def getMonth(inmo):
+    if inmo.upper() == "JAN":
+        return "01"
+    elif inmo.upper() == "FEB":
+        return "02"
+    elif inmo.upper() == "MAR":
+        return "03"
+    elif inmo.upper() == "APR":
+        return "04"
+    elif inmo.upper() == "MAY":
+        return "05"
+    elif inmo.upper() == "JUN":
+        return "06"
+    elif inmo.upper() == "JUL":
+        return "07"
+    elif inmo.upper() == "AUG":
+        return "08"
+    elif inmo.upper() == "SEP":
+        return "09"
+    elif inmo.upper() == "OCT":
+        return "10"
+    elif inmo.upper() == "NOV":
+        return "11"
+    elif inmo.upper() == "DEC":
+        return "12"
+    return "01"
+
 def parseXmlBullshit(xml):
     global sshowlist
+    global sshowdatelist
     count = 0
     for rss in xml:
         count = count + 1
@@ -94,8 +122,15 @@ def parseXmlBullshit(xml):
         e = ET.parse(rss).getroot()
         for child in e:
             for kiddie in child.findall('item'):
+                date = kiddie.find('pubDate').text
+                date = date.split(' ')
+                day = date[1]
+                month = getMonth(date[2])
+                year = date[3][-2:]
+
                 for lilbaby in kiddie.findall('enclosure'):
                     sshowlist.append(lilbaby.get('url'))
+                sshowdatelist.append(month+day+year)
     del e
 
 def load_SFSS():
@@ -143,6 +178,20 @@ def load_SFSS():
     print 'Parsing complete! Enjoy! You can now use the randomizer as you normally would.'
     print '---------------------'
 
+def get_todays_show():
+    global showlist
+    global btodays_show_available
+    global todays_show_index
+    if isSShowMember == False:
+        for show in showlist:
+            if todays_show in show:
+                btodays_show_available = True
+                todays_show_index = showlist.index(show)
+    else:
+        if todays_show in sshowdatelist:
+            btodays_show_available = True
+            todays_show_index = sshowdatelist.index(todays_show)
+
 try:
         website = urllib2.urlopen(TLD)
 except urllib2.HTTPError:
@@ -156,15 +205,12 @@ print '---------------------'
 print 'Ready. Press [ENTER] while this window is focused to request a new show.'
 usage()
 
-for show in showlist:
-    if todays_show in show:
-        btodays_show_available = True
-        todays_show_index = showlist.index(show)
-
 if isSShowMember is False:
     if findSShowMember() is True:
         if validateFreak() is True:
             load_SFSS()
+
+get_todays_show()
 
 while(1):
         data = raw_input()
@@ -172,7 +218,10 @@ while(1):
         if data.find("today") != -1 or data.find("t") != -1 or data.find("fuck") != -1:
             if btodays_show_available:
                 bloadShow = True
-                showlink = TLD + showlist[todays_show_index]
+                if isSShowMember == False:
+                    showlink = TLD + showlist[todays_show_index]
+                else:
+                    showlink = "http://" + ssUname + ":" + ssPw + "@" + sshowlist[todays_show_index].replace('http://', '')
             else:
                 bloadShow = False
                 print 'Today\'s show is unavailable here.'
@@ -200,6 +249,7 @@ while(1):
                 if findSShowMember() is True:
                     if validateFreak() is True:
                         load_SFSS()
+                        get_todays_show()
                 else:
                     print 'Looks like you need to set your Sideshow Login Credentials.'
                     print 'Please enter your Username and Password. Remember, these aren\'t encrypted so...'
@@ -217,6 +267,7 @@ while(1):
                             print 'Looks like you\'re ready to go! Let\'s load those shows.'
                             print '---------------------'
                             load_SFSS()
+                            get_todays_show()
             else:
                 print 'You\'re already logged in, dude'
                 print '---------------------'

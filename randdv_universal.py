@@ -128,6 +128,12 @@ def parseXmlBullshit(xml):
                 month = getMonth(date[2])
                 year = date[3][-2:]
 
+                detectLateShow = date[4].split(':')
+                if int(detectLateShow[0]) < 5:
+                    day = str(int(day) - 1)
+                    if len(day) < 2:
+                        day = "0" + day
+
                 for lilbaby in kiddie.findall('enclosure'):
                     sshowlist.append(lilbaby.get('url'))
                 sshowdatelist.append(month+day+year)
@@ -210,12 +216,11 @@ if isSShowMember is False:
         if validateFreak() is True:
             load_SFSS()
 
-get_todays_show()
-
 while(1):
         data = raw_input()
 
         if data.find("today") != -1 or data.find("t") != -1 or data.find("fuck") != -1:
+            get_todays_show()
             if btodays_show_available:
                 bloadShow = True
                 if isSShowMember == False:

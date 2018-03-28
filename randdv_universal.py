@@ -1,4 +1,4 @@
-import webbrowser, time, random, urllib2, urllib, sys, os
+import webbrowser, time, random, urllib2, urllib, sys, os, ssl
 from HTMLParser import HTMLParser
 import xml.etree.ElementTree as ET
 
@@ -63,7 +63,6 @@ def validateFreak():
     try:
         result = urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "podcast.xml")
     except:
-        os.remove(os.getcwd() + "/" + "freak.lgn")
         print 'Unable to log in with provided credentials. TRY AGAIN.'
         print '---------------------'
         return False
@@ -144,40 +143,36 @@ def load_SFSS():
     global ssUname
     global ssPw
     sfssrss = []
-    removeme = []
 
-    for show in showlist:
-        if(len(show) > 8):
-            if str(show[7]+show[8]) != "16":
-                removeme.append(show)
+    del showlist[:]
 
-    for show in removeme:
-        showlist.remove(show)
-    del removeme[:]
-
-    print 'loading 0%...'
+    print 'loading 1/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "podcast.xml"))
-    print 'Current Year downloaded. loading 9%...'
+    print 'Current Year downloaded. loading 2/13...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2017.xml"))
+    print '2015 downloaded. loading 3/13...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2016.xml"))
+    print '2015 downloaded. loading 4/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2015.xml"))
-    print '2015 downloaded. loading 18%...'
+    print '2015 downloaded. loading 5/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2014.xml"))
-    print '2014 downloaded. loading 27%...'
+    print '2014 downloaded. loading 6/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2013.xml"))
-    print '2013 downloaded. loading 36%...'
+    print '2013 downloaded. loading 7/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2012.xml"))
-    print '2012 downloaded. loading 45%...'
+    print '2012 downloaded. loading 8/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2011.xml"))
-    print '2011 downloaded. loading 54%...'
+    print '2011 downloaded. loading 9/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2010.xml"))
-    print '2010 downloaded. loading 63%...'
+    print '2010 downloaded. loading 10/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2007.xml"))
-    print '2007 downloaded. loading 72%...'
+    print '2007 downloaded. loading 11/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2006.xml"))
-    print '2006 downloaded. loading 81%...'
+    print '2006 downloaded. loading 12/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2005.xml"))
-    print '2005 downloaded. loading 90%...'
+    print '2005 downloaded. loading 13/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2004.xml"))
-    print '2004 downloaded. loading 100%!'
+    print '2004 downloaded. Loading Complete!'
 
     print 'Parsing the shows...'
     parseXmlBullshit(sfssrss)

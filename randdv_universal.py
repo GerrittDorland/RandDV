@@ -150,9 +150,9 @@ def load_SFSS():
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "podcast.xml"))
     print 'Current Year downloaded. loading 2/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2017.xml"))
-    print '2015 downloaded. loading 3/13...'
+    print '2017 downloaded. loading 3/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2016.xml"))
-    print '2015 downloaded. loading 4/13...'
+    print '2016 downloaded. loading 4/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2015.xml"))
     print '2015 downloaded. loading 5/13...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2014.xml"))

@@ -135,7 +135,8 @@ def parseXmlBullshit(xml):
 
                 for lilbaby in kiddie.findall('enclosure'):
                     sshowlist.append(lilbaby.get('url'))
-                sshowdatelist.append(month+day+year)
+                if len(sshowlist) > len(sshowdatelist):
+                    sshowdatelist.append(month+day+year)
     del e
 
 def load_SFSS():
@@ -179,6 +180,15 @@ def load_SFSS():
     print 'Parsing complete! Enjoy! You can now use the randomizer as you normally would.'
     print '---------------------'
 
+def get_show_on_date(day):
+    global sshowdatelist
+    try:
+        showindex = sshowdatelist.index(day)
+        print sshowdatelist[showindex]
+        return int(showindex)
+    except:
+        print "Could not find Shit Dildo... Something's fucky"
+
 def get_todays_show():
     global showlist
     global btodays_show_available
@@ -214,7 +224,7 @@ if isSShowMember is False:
 while(1):
         data = raw_input()
 
-        if data.find("today") != -1 or data.find("t") != -1 or data.find("fuck") != -1:
+        if data.find("today") != -1 or data == "t" != -1 or data.find("fuck") != -1:
             get_todays_show()
             if btodays_show_available:
                 bloadShow = True
@@ -229,6 +239,9 @@ while(1):
                 print 'Feel free to check here:'
                 print 'http://www.superfreaksideshow.com/members3/category/podcasts/'
                 print '---------------------'
+        elif data.find("shitdildo"):
+            showlink = "http://" + ssUname + ":" + ssPw + "@" + sshowlist[get_show_on_date("061510")].replace('http://', '')
+            bloadShow = True
         elif len(data) < 1:
             bloadShow = True
 

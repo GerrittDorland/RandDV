@@ -184,7 +184,6 @@ def get_show_on_date(day):
     global sshowdatelist
     try:
         showindex = sshowdatelist.index(day)
-        print sshowdatelist[showindex]
         return int(showindex)
     except:
         print "Could not find Shit Dildo... Something's fucky"

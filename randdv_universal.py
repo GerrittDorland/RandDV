@@ -23,7 +23,7 @@ todays_show_index = -1
 bloadShow = False
 showlink = ""
 parser = MyHTMLParser()
-TLD = "http://www.distortednews.com/podshows/"
+TLD = "http://www.superfreaksideshow.com/podshows/"
 
 def usage():
     print '---------------------'

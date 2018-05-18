@@ -238,7 +238,8 @@ while(1):
                 print 'Feel free to check here:'
                 print 'http://www.superfreaksideshow.com/members3/category/podcasts/'
                 print '---------------------'
-        elif data.find("shitdildo"):
+        elif data.find("shitdildo") != -1:
+            print 'why here'
             showlink = "http://" + ssUname + ":" + ssPw + "@" + sshowlist[get_show_on_date("061510")].replace('http://', '')
             bloadShow = True
         elif len(data) < 1:

@@ -1,5 +1,6 @@
 import webbrowser, time, random, urllib2, urllib, sys, os, ssl
 from HTMLParser import HTMLParser
+from datetime import date, timedelta
 import xml.etree.ElementTree as ET
 
 class MyHTMLParser(HTMLParser):
@@ -18,8 +19,11 @@ showlist = []
 sshowlist = []
 sshowdatelist = []
 todays_show = time.strftime("%m%d%y")
+yesterdays_show = (date.today() - timedelta(1)).strftime("%m%d%y")
 btodays_show_available = False
+byesterdays_show_available = False
 todays_show_index = -1
+yesterdays_show_index = -1
 bloadShow = False
 showlink = ""
 parser = MyHTMLParser()
@@ -201,6 +205,19 @@ def get_todays_show():
         if todays_show in sshowdatelist:
             btodays_show_available = True
             todays_show_index = sshowdatelist.index(todays_show)
+def get_yesterdays_show():
+    global showlist
+    global byesterdays_show_available
+    global yesterdays_show_index
+    if isSShowMember == False:
+        for show in showlist:
+            if yesterdays_show in show:
+                byesterdays_show_available = True
+                yesterdays_show_index = showlist.index(show)
+    else:
+        if yesterdays_show in sshowdatelist:
+            byesterdays_show_available = True
+            yesterdays_show_index = sshowdatelist.index(yesterdays_show)
 
 try:
         website = urllib2.urlopen(TLD)
@@ -234,6 +251,21 @@ while(1):
             else:
                 bloadShow = False
                 print 'Today\'s show is unavailable here.'
+                print 'Either it hasn\'t been posted yet, or is a Sideshow Exclusive.'
+                print 'Feel free to check here:'
+                print 'http://www.superfreaksideshow.com/members3/category/podcasts/'
+                print '---------------------'
+        elif data.find("yesterday") != -1 or data == "y" != -1 or data.find("tuck") != -1:
+            get_yesterdays_show()
+            if byesterdays_show_available:
+                bloadShow = True
+                if isSShowMember == False:
+                    showlink = TLD + showlist[yesterdays_show_index]
+                else:
+                    showlink = "http://" + ssUname + ":" + ssPw + "@" + sshowlist[yesterdays_show_index].replace('http://', '')
+            else:
+                bloadShow = False
+                print 'Yesterday\'s show is unavailable here.'
                 print 'Either it hasn\'t been posted yet, or is a Sideshow Exclusive.'
                 print 'Feel free to check here:'
                 print 'http://www.superfreaksideshow.com/members3/category/podcasts/'

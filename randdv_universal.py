@@ -27,7 +27,7 @@ yesterdays_show_index = -1
 bloadShow = False
 showlink = ""
 parser = MyHTMLParser()
-TLD = "http://www.superfreaksideshow.com/podshows/"
+TLD = "http://www.superfreaksideshow.com/"
 
 def usage():
     print '---------------------'
@@ -39,7 +39,6 @@ def usage():
 def findSShowMember():
     global ssUname
     global ssPw
-    #If you are on Windows, change this "/" to "\\"
     file = os.getcwd() + "/" + "freak.lgn"
     try:
         f = open(file, 'r')
@@ -74,7 +73,6 @@ def validateFreak():
     return True
 
 def createFreak(uname,pw):
-    #If you are on Windows, change this "/" to "\\"
     file = os.getcwd() + "/" + "freak.lgn"
     if isSShowMember is True:
         try:
@@ -151,31 +149,37 @@ def load_SFSS():
 
     del showlist[:]
 
-    print 'loading 1/13...'
+    print 'loading main feed...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "podcast.xml"))
-    print 'Current Year downloaded. loading 2/13...'
+    print 'Current Year downloaded. loading 2018...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2018.xml"))
+    print '2018 Year downloaded. loading 2017...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2017.xml"))
-    print '2017 downloaded. loading 3/13...'
+    print '2017 downloaded. loading 2016...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2016.xml"))
-    print '2016 downloaded. loading 4/13...'
+    print '2016 downloaded. loading 2015...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2015.xml"))
-    print '2015 downloaded. loading 5/13...'
+    print '2015 downloaded. loading 2014...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2014.xml"))
-    print '2014 downloaded. loading 6/13...'
+    print '2014 downloaded. loading 2013...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2013.xml"))
-    print '2013 downloaded. loading 7/13...'
+    print '2013 downloaded. loading 2012...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2012.xml"))
-    print '2012 downloaded. loading 8/13...'
+    print '2012 downloaded. loading 2011...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2011.xml"))
-    print '2011 downloaded. loading 9/13...'
+    print '2011 downloaded. loading 2010...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2010.xml"))
-    print '2010 downloaded. loading 10/13...'
+    print '2010 downloaded. loading 2009...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2009.xml"))
+    print '2010 downloaded. loading 2008...'
+    sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2008.xml"))
+    print '2010 downloaded. loading 2007...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2007.xml"))
-    print '2007 downloaded. loading 11/13...'
+    print '2007 downloaded. loading 2006...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2006.xml"))
-    print '2006 downloaded. loading 12/13...'
+    print '2006 downloaded. loading 2005...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2005.xml"))
-    print '2005 downloaded. loading 13/13...'
+    print '2005 downloaded. loading 2004...'
     sfssrss.append(urllib.urlopen("http://" + ssUname + ":" + ssPw + "@" + sideshowRss + "2004.xml"))
     print '2004 downloaded. Loading Complete!'
 

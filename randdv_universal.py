@@ -251,7 +251,7 @@ while(1):
                 if isSShowMember == False:
                     showlink = TLD + showlist[todays_show_index]
                 else:
-                    showlink = "http://" + ssUname + ":" + ssPw + "@" + sshowlist[todays_show_index].replace('http://', '')
+                    showlink = sshowlist[todays_show_index]
             else:
                 bloadShow = False
                 print 'Today\'s show is unavailable here.'
@@ -266,7 +266,7 @@ while(1):
                 if isSShowMember == False:
                     showlink = TLD + showlist[yesterdays_show_index]
                 else:
-                    showlink = "http://" + ssUname + ":" + ssPw + "@" + sshowlist[yesterdays_show_index].replace('http://', '')
+                    showlink = sshowlist[yesterdays_show_index]
             else:
                 bloadShow = False
                 print 'Yesterday\'s show is unavailable here.'
@@ -276,7 +276,7 @@ while(1):
                 print '---------------------'
         elif data.find("shitdildo") != -1:
             print 'why here'
-            showlink = "http://" + ssUname + ":" + ssPw + "@" + sshowlist[get_show_on_date("061510")].replace('http://', '')
+            showlink = sshowlist[get_show_on_date("061510")]
             bloadShow = True
         elif len(data) < 1:
             bloadShow = True
@@ -289,7 +289,7 @@ while(1):
                 if show <= sizeFree:
                     showlink = TLD + showlist[show]
                 else:
-                    showlink = "http://" + ssUname + ":" + ssPw + "@" + sshowlist[show - sizeFree].replace('http://', '')
+                    showlink = sshowlist[show - sizeFree]
             else:
                 show = showlist[random.randint(1,len(showlist))]
                 showlink = TLD + show

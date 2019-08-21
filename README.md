@@ -2,7 +2,7 @@
 
 THE SKINNY:
 	- The "Universal" script works on all platforms, but requires interacting with the console window to load new shows. This script is more robust, and sports a couple extra commands e.g. the 'today' command.
-	- The "Windows" script only works on Windows. It's pretty fucking trash in comparison at this point, but you can load a show without window focus... I also think the Windows script can't load Sideshow shows? I can't remember.
+	- THE WINDOWS SCRIPT IS DEAD.
 
 USAGE (universal):
 	- While script is running, set focus to the console that is running the script.
@@ -17,12 +17,3 @@ TO CLOSE (universal):
 
 TO COMPILE (universal):
 	- No dependencies. Python 2.7.
-
-USAGE (Windows):
-	- While the script is running, press R_CONTROL. Window focus on the script is not necessary.
-
-TO COMPILE (Windows):
-	- You need two non-standard Python libraries:
-		- win32api
-		- win32con
-	- You can get both here: https://github.com/mhammond/pywin32
